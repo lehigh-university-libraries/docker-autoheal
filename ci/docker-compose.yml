@@ -1,0 +1,12 @@
+services:
+  webhook:
+    image: python:3.11-slim
+    working_dir: /app
+    volumes:
+      - ./:/app
+    ports:
+      - "8080:8080"
+    command: bash -c "pip install flask && python webhook.py"
+  foo:
+    image: python:3.11-slim
+    command: tail -f /dev/null

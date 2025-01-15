@@ -58,6 +58,7 @@ func serve(config *Config) {
 	statusFilter.Add("status", "dead")
 
 	stopOpts := container.StopOptions{}
+	thirtySeconds := time.Second * 30
 	ctx := context.Background()
 	slog.Info("Starting check")
 	for {
@@ -85,6 +86,21 @@ func serve(config *Config) {
 
 		containers := []string{}
 		for _, c := range append(unhealthy, stopped...) {
+			inspect, err := cli.ContainerInspect(ctx, c.ID)
+			if err != nil {
+				slog.Error("Unable to inspect container", "name", c.Names, "err", err)
+				continue
+			}
+			finishedAt, err := time.Parse(time.RFC3339, inspect.State.FinishedAt)
+			if err != nil {
+				slog.Error("Unable to parse FinishedAt timestamp", "name", c.Names, "FinishedAt", inspect.State.FinishedAt, "err", err)
+				continue
+			}
+			if time.Since(finishedAt) < thirtySeconds {
+				slog.Info("Skipping container exited less than 30s ago", "name", c.Names, "status", c.Status)
+				continue
+			}
+
 			slog.Warn("Restarting container", "name", c.Names, "status", c.Status)
 			if err := cli.ContainerRestart(ctx, c.ID, stopOpts); err != nil {
 				slog.Error("Unable to restart container", "container.ID", c.ID, "err", err)

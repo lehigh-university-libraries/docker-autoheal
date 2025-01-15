@@ -3,6 +3,7 @@
 set -euo pipefail
 
 WEBHOOK_URL=http://localhost:8080
+LOCK_FILE=/tmp/lock.file
 
 docker compose -f ./ci/docker-compose.yml up -d
 
@@ -11,14 +12,31 @@ until curl -s -o /dev/null -w "%{http_code}" "$WEBHOOK_URL" | grep -q "200"; do
   sleep 1
 done
 
+touch "$LOCK_FILE"
+if [ ! -f "$LOCK_FILE" ]; then
+  echo "Failed to create lock file"
+  exit 1
+fi
+
 echo "Starting our docker healthy monitor in the background"
-nohup ./docker-autoheal --interval "5s" --webhook-url $WEBHOOK_URL --webhook-key foo &
+nohup ./docker-autoheal \
+  --interval "5s" \
+  --webhook-url "$WEBHOOK_URL" \
+  --webhook-key foo \
+  --lock-file "$LOCK_FILE" &
 PID=$!
 
 echo "Stopping our test container"
 docker stop ci-foo-1 > /dev/null 2>&1
 
 # wait for monitor to detect/fix
+sleep 10
+
+echo "Making sure webhook didnt get any events"
+docker logs ci-webhook-1 2>&1 | grep -q "Unhealthy services" && exit 1
+
+echo "removing lock file"
+rm "$LOCK_FILE"
 sleep 10
 
 docker logs ci-webhook-1 2>&1 | grep -q "Unhealthy services"

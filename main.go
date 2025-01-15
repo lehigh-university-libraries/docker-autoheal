@@ -61,6 +61,14 @@ func serve(config *Config) {
 	ctx := context.Background()
 	slog.Info("Starting check")
 	for {
+		if config.LockFile != "" {
+			if _, err := os.Stat(config.LockFile); err == nil {
+				slog.Info("Lock file exists, not checking health")
+				time.Sleep(config.Interval)
+				continue
+			}
+		}
+
 		unhealthy, err := cli.ContainerList(ctx, container.ListOptions{
 			Filters: unhealthyFilter,
 		})

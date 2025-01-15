@@ -30,7 +30,8 @@ echo "Stopping our test container"
 docker stop ci-foo-1 > /dev/null 2>&1
 
 # wait for monitor to detect/fix
-sleep 10
+# after 30s delay
+sleep 45
 
 echo "Making sure webhook didnt get any events"
 docker logs ci-webhook-1 2>&1 | grep -q "Unhealthy services" && exit 1

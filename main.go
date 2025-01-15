@@ -93,7 +93,7 @@ func serve(config *Config) {
 			}
 			finishedAt, err := time.Parse(time.RFC3339, inspect.State.FinishedAt)
 			if err != nil {
-				slog.Error("Unable to parse FinishedAt timestamp", "name", c.Names, "StartedAt", inspect.State.StartedAt, "err", err)
+				slog.Error("Unable to parse FinishedAt timestamp", "name", c.Names, "FinishedAt", inspect.State.FinishedAt, "err", err)
 				continue
 			}
 			if time.Since(finishedAt) < thirtySeconds {

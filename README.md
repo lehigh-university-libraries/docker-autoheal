@@ -1,4 +1,4 @@
-# docker autohealh
+# docker autoheal
 
 Command line utility to automatically restart docker containers that are unhealthy or stopped/exited.
 

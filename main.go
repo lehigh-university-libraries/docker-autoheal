@@ -91,13 +91,13 @@ func serve(config *Config) {
 				slog.Error("Unable to inspect container", "name", c.Names, "err", err)
 				continue
 			}
-			startedAt, err := time.Parse(time.RFC3339, inspect.State.StartedAt)
+			finishedAt, err := time.Parse(time.RFC3339, inspect.State.FinishedAt)
 			if err != nil {
-				slog.Error("Unable to parse StartedAt timestamp", "name", c.Names, "StartedAt", inspect.State.StartedAt, "err", err)
+				slog.Error("Unable to parse FinishedAt timestamp", "name", c.Names, "StartedAt", inspect.State.StartedAt, "err", err)
 				continue
 			}
-			if time.Since(startedAt) < thirtySeconds {
-				slog.Info("Skipping container started less than 30s ago", "name", c.Names, "status", c.Status)
+			if time.Since(finishedAt) < thirtySeconds {
+				slog.Info("Skipping container exited less than 30s ago", "name", c.Names, "status", c.Status)
 				continue
 			}
 

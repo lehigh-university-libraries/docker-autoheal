@@ -18,8 +18,6 @@ if [ ! -f "$LOCK_FILE" ]; then
   exit 1
 fi
 
-sleep 30
-
 echo "Starting our docker healthy monitor in the background"
 nohup ./docker-autoheal \
   --interval "5s" \

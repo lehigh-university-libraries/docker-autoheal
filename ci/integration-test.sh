@@ -39,7 +39,7 @@ echo "removing lock file"
 rm "$LOCK_FILE"
 sleep 10
 
-docker logs ci-webhook-1 2>&1 | grep -q "Unhealthy services" && exit 1
+docker logs ci-webhook-1 2>&1 | grep -q "Unhealthy services"
 echo "webhook received the failure payload"
 
 sleep 10

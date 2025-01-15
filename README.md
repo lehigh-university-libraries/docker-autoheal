@@ -71,7 +71,7 @@ RestartSec=15s
 
 [Install]
 WantedBy=multi-user.target
-
+EOF
 $ systemctl enable docker-autoheal.service
 $ systemctl start docker-autoheal.service
 ```

@@ -45,7 +45,7 @@ func serve(config *Config) {
 	signal.Notify(sigint, os.Interrupt)
 	defer signal.Stop(sigint)
 
-	cli, err := client.NewClientWithOpts()
+	cli, err := client.NewClientWithOpts(client.WithVersion("1.45"))
 	if err != nil {
 		panic(err)
 	}

@@ -118,7 +118,7 @@ func (config *Config) triggerWebhook(labels []string) error {
 	} else {
 		config.webhookLock = true
 		webhookMessage = fmt.Sprintf(`:rotating_light: Unhealthy services:
-- %s`, strings.Join(labels, "\n-"))
+    %s`, strings.Join(labels, "\n    "))
 	}
 	payload := map[string]string{
 		config.WebhookKey: webhookMessage,

@@ -34,6 +34,44 @@ Usage of ./docker-autoheal:
         Send messages to a webhook
 ```
 
+By default, every 10 seconds this service will check if any docker containers have exited or are unhealthy. It will then attempt to `docker restart` the unhealthy container(s).
+
+### Webhook
+
+If the `--webhook-url` is passed, a message will be sent to the webhook when the failure is detected. Once docker is healthy again an "All is well" message will be sent.
+
+```
+:white_check_mark: All is well
+```
+
+### Lock file
+
+If you have a lock file sent when code changes are rolled out to your docker service via CI/CD, you can pass the path to the lockfile to this service. If the file exists, autoheal will not be attempted to avoid colliding with the rollout process.
+
+## Install
+
+Ideally this service runs on your host system (and not in a docker container). Mainly so if this service dies for some reason, systemd can restart it (since this service can not restart itself).
+
+```
+$ cat << EOF > /etc/systemd/system/docker-autoheal.service
+[Unit]
+Description=Monitor docker health
+After=docker.service
+
+[Service]
+EnvironmentFile=/path/to/.env
+ExecStart=/usr/bin/docker-autoheal \
+  --webhook-url "$SLACK_WEBHOOK" \
+  --webhook-key "msg" \
+  --lock-file "/path/to/rollout.lock"
+
+[Install]
+WantedBy=multi-user.target
+
+$ systemctl enable docker-autoheal.service
+$ systemctl start docker-autoheal.service
+```
+
 ## Updating
 
 ### Homebrew

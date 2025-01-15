@@ -57,6 +57,8 @@ $ cat << EOF > /etc/systemd/system/docker-autoheal.service
 [Unit]
 Description=Monitor docker health
 After=docker.service
+StartLimitIntervalSec=120
+StartLimitBurst=3
 
 [Service]
 EnvironmentFile=/path/to/.env
@@ -64,6 +66,8 @@ ExecStart=/usr/bin/docker-autoheal \
   --webhook-url "$SLACK_WEBHOOK" \
   --webhook-key "msg" \
   --lock-file "/path/to/rollout.lock"
+Restart=on-failure
+RestartSec=15s
 
 [Install]
 WantedBy=multi-user.target

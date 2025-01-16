@@ -179,6 +179,14 @@ func (dah *DockerAutoHeal) triggerWebhook(labels []string) error {
 		}
 
 		dah.webhookLock = false
+		// if we already sent a message
+		// bail
+	} else if dah.webhookLock {
+		// TODO track containers messages were sent for
+		// and if a now contaienr in the list, send it as well
+		// for now, we know from slack one message means there is some container(s) failing
+		// and they are broke until we get the all is well message
+		return nil
 	} else {
 		dah.webhookLock = true
 		webhookMessage = fmt.Sprintf(`:rotating_light: Unhealthy services:

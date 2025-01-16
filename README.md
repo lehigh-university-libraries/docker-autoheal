@@ -38,19 +38,16 @@ By default, every 10 seconds this service will check if any docker containers ha
 
 ### Webhook
 
-If the `--webhook-url https://slack/webhook/url` is passed, a message will be sent to the webhook when the failure is detected. Once docker is healthy again an "All is well" message will be sent.
+If the `--webhook-url https://slack/webhook/url` is passed, a JSON payload will be sent to the webhook when the failure is detected. Once docker is healthy again an "All is well" message will be sent.
 
-```
-:white_check_mark: All is well
-```
 
 ### Lock file
 
-If you have a lock file created when code changes are rolled out to your docker service via CI/CD, you can pass the path to the lockfile to this service via `--lock-file /path/to/local/file`. If the file exists, autoheal will not be attempted to avoid colliding with the rollout process.
+If you have a lock file created when code changes are rolled out to your docker service(s) via CI/CD, you can pass the path to the lockfile to this service via `--lock-file /path/to/local/file`. If the file exists, autoheal execution will be paused until the file is removed to avoid colliding with the rollout process.
 
 ## Install
 
-Ideally this service runs on your host system (and not in a docker container). Mainly so if this service dies for some reason, systemd can restart it (since this service can not restart itself).
+Ideally this service runs on your host system (and not in a docker container). Mainly so if this service dies for some reason, systemd can restart it (since this service can not restart itself if running inside docker).
 
 ```
 $ cat << EOF > /etc/systemd/system/docker-autoheal.service

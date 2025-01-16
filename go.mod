@@ -2,10 +2,7 @@ module github.com/lehigh-university-libraries/docker-autoheal
 
 go 1.23.4
 
-require (
-	github.com/docker/docker v27.5.0+incompatible
-	github.com/sirupsen/logrus v1.9.3
-)
+require github.com/docker/docker v27.5.0+incompatible
 
 require (
 	github.com/Microsoft/go-winio v0.4.14 // indirect

@@ -22,12 +22,16 @@ Then put the binary in a directory that is in your `$PATH`
 ## Usage
 
 ```
-$ docker-autoheal --help 
-Usage of ./docker-autoheal:
+$ docker-autoheal --help
+Usage of docker-autoheal:
+  -initial-backoff duration
+        how long to initially wait before restarting an unhealthy container (default 10s)
   -interval duration
-        frequency interval (default 10s)
+        how often to check for docker container health (default 10s)
   -lock-file string
         lock file that when exists halts docker autohealh
+  -max-backoff duration
+        maximum time to wait before attempting a container restart (default 5m0s)
   -webhook-key string
         JSON key name to add webhook messages (default "text")
   -webhook-url string

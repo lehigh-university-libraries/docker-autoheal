@@ -153,8 +153,17 @@ func (dah *DockerAutoHeal) checkHealth(ctx context.Context) {
 
 	dah.cleanupContainerStates(healthyContainers)
 	if dah.WebhookUrl != "" {
+		lockedPreWebhook := dah.webhookLock
 		if err := dah.triggerWebhook(unhealthyContainers); err != nil {
 			slog.Error("Unable to send to webhook", "err", err)
+			// if the lock was set to true before triggering the webhook
+			// and we failed to send the payload
+			// make sure we always reset the lock on webhook failure to ensure
+			// an all is well message will be sent when slack (or the webhook host)
+			// comes back online
+			if lockedPreWebhook {
+				dah.webhookLock = true
+			}
 		}
 	}
 }

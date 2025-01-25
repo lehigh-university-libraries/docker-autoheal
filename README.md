@@ -1,4 +1,6 @@
 # docker autoheal
+[![integration-test](https://github.com/lehigh-university-libraries/docker-autoheal/actions/workflows/lint-test.yml/badge.svg)](https://github.com/lehigh-university-libraries/docker-autoheal/actions/workflows/lint-test.yml)
+[![Go Report Card](https://goreportcard.com/badge/github.com/lehigh-university-libraries/docker-autoheal)](https://goreportcard.com/report/github.com/lehigh-university-libraries/docker-autoheal)
 
 Command line utility to automatically restart docker containers that are unhealthy or stopped/exited.
 

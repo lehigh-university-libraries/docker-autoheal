@@ -12,10 +12,10 @@ jobs:
       - run: shellcheck **/*.sh
 
       - name: Set up Go
-        uses: actions/setup-go@3041bf56c941b39c61721a86cd11f3bb1338122a # v5
+        uses: actions/setup-go@f111f3307d8850f501ac008e886eec1fd1932a34 # v5
 
       - name: golangci-lint
-        uses: golangci/golangci-lint-action@971e284b6050e8a5849b72094c50ab08da042db8 # v6
+        uses: golangci/golangci-lint-action@818ec4d51a1feacefc42ff1b3ec25d4962690f39 # v6
         with:
           version: latest
 

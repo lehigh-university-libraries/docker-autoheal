@@ -1,6 +1,6 @@
 services:
   webhook:
-    image: python:3.14-slim@sha256:1f741aef81d09464251f4c52c83a02f93ece0a636db125d411bd827bf381a763
+    image: python:3.14-slim@sha256:6a27522252aef8432841f224d9baaa6e9fce07b07584154fa0b9a96603af7456
     working_dir: /app
     volumes:
       - ./:/app
@@ -8,5 +8,5 @@ services:
       - "8080:8080"
     command: bash -c "pip install flask && python webhook.py"
   foo:
-    image: python:3.14-slim@sha256:1f741aef81d09464251f4c52c83a02f93ece0a636db125d411bd827bf381a763
+    image: python:3.14-slim@sha256:6a27522252aef8432841f224d9baaa6e9fce07b07584154fa0b9a96603af7456
     command: tail -f /dev/null
